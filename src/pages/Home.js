@@ -7,7 +7,9 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import InputAdornment from '@material-ui/core/InputAdornment';
+import InputAdornment from "@material-ui/core/InputAdornment";
+import Icon from "@material-ui/core/Icon";
+import SaveIcon from "@material-ui/icons/Save";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
@@ -20,11 +22,30 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 
 class Home extends Component {
-  //   static contextType = ProductConsumer;
-  //   componentDidMount() {
-  //     // getModuleHeader(mainHeader=string/HTML, isHomeModule=Boolean, headerId=string)
-  //     this.context.getModuleHeader("Home", false, "home");
-  //   }
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      name: "",
+      email: "",
+      destination: "",
+      budget: null,
+      travellersCount: null,
+    };
+  }
+
+  handleInputChange = (event) => {
+    let name = event.target.name;
+    let val = event.target.value;
+    this.setState({
+      [name]: val,
+    });
+  };
+
+  submitHandler = (event) => {
+    console.log("data : ", this.state);
+  };
+
   render() {
     return (
       <div className="" style={{ flexGrow: 1 }}>
@@ -34,40 +55,55 @@ class Home extends Component {
               Travelopia
             </Typography>
             <br />
-            <Typography variant="h6" className="" style={{ flexGrow: 1 }}>
-              Do Booking
-            </Typography>
             <Button color="inherit">Booking Details</Button>
           </Toolbar>
         </AppBar>
+        <br />
+        <Typography
+          variant="h6"
+          className="text-center"
+          style={{ flexGrow: 1 }}
+        >
+          Do Booking
+        </Typography>
         <br />
         <div className="p-2">
           <div className="card">
             <div className="card-body">
               <form className="row g-3">
-                <div class="col-md-6 mb-3">
+                <div className="col-md-6 mb-3">
                   <InputLabel id="demo-simple-select-label">Name</InputLabel>
                   <TextField
                     fullWidth
+                    name="name"
                     id="inputName"
-                    defaultValue=""
+                    defaultValue={this.state.name}
                     variant="outlined"
-                  />
-                </div>
-                <div class="col-md-6 mb-3">
-                  <InputLabel id="demo-simple-select-label">Email</InputLabel>
-                  <TextField
-                    fullWidth
-                    id="inputEmail"
-                    defaultValue=""
-                    variant="outlined"
+                    onChange={this.handleInputChange}
                   />
                 </div>
                 <div className="col-md-6 mb-3">
-                  <InputLabel id="demo-simple-select-label">
+                  <InputLabel id="demo-simple-select-label">Email</InputLabel>
+                  <TextField
+                    fullWidth
+                    name="email"
+                    id="inputEmail"
+                    defaultValue={this.state.email}
+                    variant="outlined"
+                    onChange={this.handleInputChange}
+                  />
+                </div>
+                <div className="col-md-6 mb-3">
+                  <InputLabel id="destinationOpt">
                     Select Destination
                   </InputLabel>
-                  <Select fullWidth variant="outlined">
+                  <Select
+                    fullWidth
+                    variant="outlined"
+                    name="destination"
+                    value={this.state.destination}
+                    onChange={this.handleInputChange}
+                  >
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
@@ -82,10 +118,41 @@ class Home extends Component {
                   </InputLabel>
                   <OutlinedInput
                     fullWidth
-                    id="outlined-adornment-amount"
-                    value=""
-                    startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                    name="budget"
+                    type="number"
+                    id="inputEmail"
+                    defaultValue={this.state.budget}
+                    variant="outlined"
+                    startAdornment={
+                      <InputAdornment position="start">$</InputAdornment>
+                    }
+                    onChange={this.handleInputChange}
                   />
+                </div>
+                <div className="col-md-6 mb-3">
+                  <InputLabel id="demo-simple-select-label">
+                    Number of travellers
+                  </InputLabel>
+                  <TextField
+                    type="number"
+                    name="travellersCount"
+                    fullWidth
+                    id="inputTravellersCount"
+                    defaultValue={this.state.travellersCount}
+                    variant="outlined"
+                    onChange={this.handleInputChange}
+                  />
+                </div>
+                <div className="col-12 mb-3">
+                  <Button
+                    onClick={this.submitHandler}
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    startIcon={<SaveIcon />}
+                  >
+                    Save
+                  </Button>
                 </div>
               </form>
             </div>
@@ -93,15 +160,6 @@ class Home extends Component {
         </div>
         <br />
       </div>
-      //   <ProductConsumer>
-      //     {(props) => {
-      //       return (
-      //         <div>
-      //           <h1>Home</h1>
-      //         </div>
-      //       );
-      //     }}
-      //   </ProductConsumer>
     );
   }
 }
