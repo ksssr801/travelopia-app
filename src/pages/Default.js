@@ -1,9 +1,14 @@
 import React, { Component } from "react";
+import Button from "@material-ui/core/Button";
 
 export default class Default extends Component {
   render() {
     return (
-      <div className="container">
+      <div className="container text-center">
+        <Button color="primary" variant="contained">
+          {" "}
+          Press me{" "}
+        </Button>
         <div className="row">
           <div className="col-10 mx-auto pt-5 text-center">
             <h1>404</h1>

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { ProductConsumer } from "../context";
 
-class BookingDetails extends Component {
+export default class BookingDetails extends Component {
   static contextType = ProductConsumer;
   componentDidMount() {
     // getModuleHeader(mainHeader=string/HTML, isHomeModule=Boolean, headerId=string)
@@ -22,4 +22,4 @@ class BookingDetails extends Component {
   }
 }
 
-export default BookingDetails;
+// export default BookingDetails;
