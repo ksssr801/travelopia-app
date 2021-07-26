@@ -10,6 +10,7 @@ import SaveIcon from "@material-ui/icons/Save";
 import InputLabel from "@material-ui/core/InputLabel";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 class Home extends Component {
   componentDidMount() {
@@ -34,7 +35,7 @@ class Home extends Component {
   handleInputChange = (event) => {
     let name = event.target.name;
     let val = event.target.value;
-    this.tempTravellerInfo[name] = val
+    this.tempTravellerInfo[name] = val;
     this.setState({
       travellerInfo: this.tempTravellerInfo,
     });
@@ -42,11 +43,16 @@ class Home extends Component {
 
   submitHandler = (event) => {
     axios
-      .post("http://localhost:9090/travelapp/do-booking/", this.state.travellerInfo)
+      .post(
+        "http://localhost:9090/travelapp/do-booking/",
+        this.state.travellerInfo
+      )
       .then((res) => {
         console.log("res : ", res);
-        if (res.data.status === 'success') document.getElementById("booking-form").reset();
-        else {}
+        if (res.data.status === "success")
+          document.getElementById("booking-form").reset();
+        else {
+        }
       })
       .catch((error) => {
         console.log("error : ", error);
@@ -75,7 +81,11 @@ class Home extends Component {
               Travelopia
             </Typography>
             <br />
-            <Button color="inherit">Booking Details</Button>
+            <Button color="inherit">
+              <Link to="/all-bookings" style={{ textDecoration: "None", color: "#fff" }}>
+                Booking Details
+              </Link>
+            </Button>
           </Toolbar>
         </AppBar>
         <br />
