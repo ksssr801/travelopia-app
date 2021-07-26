@@ -5,7 +5,6 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import SaveIcon from "@material-ui/icons/Save";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -13,33 +12,41 @@ import OutlinedInput from "@material-ui/core/OutlinedInput";
 import axios from "axios";
 
 class Home extends Component {
+  componentDidMount() {
+    this.getInitOptionConfig();
+  }
   constructor(props) {
     super(props);
 
     this.state = {
-      traveller: "",
-      email: "",
-      destination: "",
-      budget: null,
-      travellersCount: null,
+      travellerInfo: {
+        traveller: "",
+        email: "",
+        destination: "",
+        budget: null,
+        travellersCount: null,
+      },
+      destination_list: [],
     };
-    this.options = {}
-    this.getInitOptionConfig();
   }
 
+  tempTravellerInfo = {};
   handleInputChange = (event) => {
     let name = event.target.name;
     let val = event.target.value;
+    this.tempTravellerInfo[name] = val
     this.setState({
-      [name]: val,
+      travellerInfo: this.tempTravellerInfo,
     });
   };
 
   submitHandler = (event) => {
     axios
-      .post("http://localhost:9090/travelapp/do-booking/", this.state)
+      .post("http://localhost:9090/travelapp/do-booking/", this.state.travellerInfo)
       .then((res) => {
         console.log("res : ", res);
+        if (res.data.status === 'success') document.getElementById("booking-form").reset();
+        else {}
       })
       .catch((error) => {
         console.log("error : ", error);
@@ -50,8 +57,9 @@ class Home extends Component {
     axios
       .get("http://localhost:9090/travelapp/option-config/")
       .then((res) => {
-        console.log("res : ", res);
-        this.options = res.data;
+        this.setState({
+          destination_list: res.data.destination_list,
+        });
       })
       .catch((error) => {
         console.log("error : ", error);
@@ -82,16 +90,19 @@ class Home extends Component {
         <div className="p-2">
           <div className="card">
             <div className="card-body">
-              <form className="row g-3">
+              <form id="booking-form" className="row g-3">
                 <div className="col-md-6 mb-3">
-                  <InputLabel id="demo-simple-select-label">Name</InputLabel>
+                  <InputLabel id="demo-simple-select-label">
+                    Traveller
+                  </InputLabel>
                   <TextField
                     fullWidth
                     name="traveller"
                     id="inputTraveller"
-                    defaultValue={this.state.traveller}
+                    defaultValue={this.state.travellerInfo.traveller}
                     variant="outlined"
                     onChange={this.handleInputChange}
+                    placeholder="Enter traveller name"
                   />
                 </div>
                 <div className="col-md-6 mb-3">
@@ -100,9 +111,10 @@ class Home extends Component {
                     fullWidth
                     name="email"
                     id="inputEmail"
-                    defaultValue={this.state.email}
+                    defaultValue={this.state.travellerInfo.email}
                     variant="outlined"
                     onChange={this.handleInputChange}
+                    placeholder="Enter email"
                   />
                 </div>
                 <div className="col-md-6 mb-3">
@@ -111,17 +123,18 @@ class Home extends Component {
                   </InputLabel>
                   <Select
                     fullWidth
+                    native
                     variant="outlined"
                     name="destination"
-                    value={this.state.destination}
+                    value={this.state.travellerInfo.destination}
                     onChange={this.handleInputChange}
                   >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    <option value="" disabled>
+                      --Select destination--
+                    </option>
+                    {this.state.destination_list.map(({ id, name }, index) => (
+                      <option value={id}>{name}</option>
+                    ))}
                   </Select>
                 </div>
                 <div className="col-md-6 mb-3">
@@ -133,8 +146,9 @@ class Home extends Component {
                     name="budget"
                     type="number"
                     id="inputEmail"
-                    defaultValue={this.state.budget}
+                    defaultValue={this.state.travellerInfo.budget}
                     variant="outlined"
+                    placeholder="Enter budget"
                     startAdornment={
                       <InputAdornment position="start">$</InputAdornment>
                     }
@@ -150,9 +164,10 @@ class Home extends Component {
                     name="travellersCount"
                     fullWidth
                     id="inputTravellersCount"
-                    defaultValue={this.state.travellersCount}
+                    defaultValue={this.state.travellerInfo.travellersCount}
                     variant="outlined"
                     onChange={this.handleInputChange}
+                    placeholder="Enter traveller's count"
                   />
                 </div>
                 <div className="col-12 mb-3 pull-right">
