@@ -11,6 +11,9 @@ import InputLabel from "@material-ui/core/InputLabel";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { Bounce, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 class Home extends Component {
   componentDidMount() {
@@ -49,9 +52,25 @@ class Home extends Component {
       )
       .then((res) => {
         console.log("res : ", res);
-        if (res.data.status === "success")
+        if (res.data.status === "success") {
           document.getElementById("booking-form").reset();
-        else {
+          toast.success("Booking details saved!", {
+            position: "bottom-right",
+            autoClose: 2500,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            progress: undefined,
+          });
+        } else {
+          toast.error("Error in saving!", {
+            position: "bottom-right",
+            autoClose: 2500,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            progress: undefined,
+          });
         }
       })
       .catch((error) => {
@@ -82,7 +101,10 @@ class Home extends Component {
             </Typography>
             <br />
             <Button color="inherit">
-              <Link to="/all-bookings" style={{ textDecoration: "None", color: "#fff" }}>
+              <Link
+                to="/all-bookings"
+                style={{ textDecoration: "None", color: "#fff" }}
+              >
                 Booking Details
               </Link>
             </Button>
@@ -190,6 +212,14 @@ class Home extends Component {
                   >
                     Save
                   </Button>
+                  <ToastContainer
+                    position="bottom-right"
+                    autoClose={2500}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick
+                    transition={Bounce}
+                  />
                 </div>
               </form>
             </div>

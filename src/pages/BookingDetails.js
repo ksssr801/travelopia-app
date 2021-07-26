@@ -20,12 +20,13 @@ class BookingDetails extends Component {
   }
 
   tblColumns = [
-    { field: "booking_id", headerName: "ID", width: 150, },
+    { field: "booking_id", headerName: "Booking ID", width: 150, },
     { field: "traveller", headerName: "Traveller", width: 200, },
     { field: "email_id", headerName: "Email ID", width: 200, },
     { field: "destination", headerName: "Destination", width: 200, },
     { field: "total_travellers", headerName: "Total Travellers", width: 200, },
-    { field: "budget_per_person", headerName: "Budget/Person", width: 200, },
+    { field: "budget_per_person", headerName: "Budget/Person ($)", width: 200, },
+    { field: "readable_creation_time", headerName: "Creation Time", width: 200, },
   ];
 
   getBookingInfo = () => {
