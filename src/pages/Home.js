@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-// import { ProductConsumer } from "../context";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -8,30 +7,24 @@ import TextField from "@material-ui/core/TextField";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import Icon from "@material-ui/core/Icon";
 import SaveIcon from "@material-ui/icons/Save";
-import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
-import Input from "@material-ui/core/Input";
-import FilledInput from "@material-ui/core/FilledInput";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
+import axios from "axios";
 
 class Home extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      name: "",
+      traveller: "",
       email: "",
       destination: "",
       budget: null,
       travellersCount: null,
     };
+    this.options = {}
+    this.getInitOptionConfig();
   }
 
   handleInputChange = (event) => {
@@ -43,7 +36,26 @@ class Home extends Component {
   };
 
   submitHandler = (event) => {
-    console.log("data : ", this.state);
+    axios
+      .post("http://localhost:9090/travelapp/do-booking/", this.state)
+      .then((res) => {
+        console.log("res : ", res);
+      })
+      .catch((error) => {
+        console.log("error : ", error);
+      });
+  };
+
+  getInitOptionConfig = () => {
+    axios
+      .get("http://localhost:9090/travelapp/option-config/")
+      .then((res) => {
+        console.log("res : ", res);
+        this.options = res.data;
+      })
+      .catch((error) => {
+        console.log("error : ", error);
+      });
   };
 
   render() {
@@ -75,9 +87,9 @@ class Home extends Component {
                   <InputLabel id="demo-simple-select-label">Name</InputLabel>
                   <TextField
                     fullWidth
-                    name="name"
-                    id="inputName"
-                    defaultValue={this.state.name}
+                    name="traveller"
+                    id="inputTraveller"
+                    defaultValue={this.state.traveller}
                     variant="outlined"
                     onChange={this.handleInputChange}
                   />
@@ -143,7 +155,7 @@ class Home extends Component {
                     onChange={this.handleInputChange}
                   />
                 </div>
-                <div className="col-12 mb-3">
+                <div className="col-12 mb-3 pull-right">
                   <Button
                     onClick={this.submitHandler}
                     variant="contained"
